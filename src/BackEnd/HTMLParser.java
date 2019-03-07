@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.*;
 import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.util.Map.Entry;
 
 public class HTMLParser {
 
@@ -57,28 +59,48 @@ public class HTMLParser {
         }
     }
 
-    public static void printTreeMapVertically(TreeMap tree) {
-        for (Object key : tree.keySet()) {
-            System.out.println(key + " = " + tree.get(key));
+    public static void printListVertically(List<Entry<String, Long>> listEntry) {
+        for (Entry<String, Long> entry : listEntry) {
+            String key = entry.getKey();
+            Long value = entry.getValue();
+            System.out.println(key + " = " + value);
         }
     }
 
-    public static String[] filterStrings(String string, String regex) {
-        String[] outPutArray = string.split(regex);
-        return outPutArray;
+    public static List<Map.Entry<String, Long>> filterAndSort(String string, String regex) {
+
+        //
+        Map<String, Long> frequencyMap = Arrays.stream(string.split("\\s+"))
+                .filter(word -> word.matches("\\b\\w{5,}\\b"))
+                .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+        Comparator<Map.Entry<String, Long>> byValue = Comparator.comparing( Map.Entry::getValue);
+
+        //
+        List<Map.Entry<String, Long>> sortedByFrequency = frequencyMap.entrySet()
+                .stream()
+                .sorted(byValue.reversed())
+                .collect( Collectors.toList());
+
+        return sortedByFrequency;
+
     }
 
+
     public static void rankEntries(TreeMap tree, int rank) {
+
     }
 
     public static void run(String regex) throws IOException {
-        printTreeMapVertically(sortDescending(countStrings(filterStrings(grabWebPage(), regex))));
+        printListVertically(filterAndSort(grabWebPage(), regex));
     }
 
     public static void main(String[] args) throws IOException {
+        // To just grab the webpage sting
         //System.out.print(grabWebPage());
-        //run("[^a-zA-Z]+"+"\\b"+"[\\w]{0,4}"+"\\b");
+
         run("[^a-zA-Z\\s]+|\\b\\w{0,4}\\b");
+
+
 
     }
 }
