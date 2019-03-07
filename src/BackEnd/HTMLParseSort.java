@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -30,10 +31,7 @@ public class HTMLParseSort {
 
     static String[] test = {"test", "test", "test",  "SingularWord"};
 
-    public void filterStrings(){
-
-    }
-
+    // Counts Amount of words in array and puts words with keys on a hashmap
     public static HashMap countStrings(String[] wordList){
         HashMap map = new HashMap();
         Integer ONE = new Integer(1);
@@ -54,15 +52,16 @@ public class HTMLParseSort {
     }
 
 
-    public static TreeMap parseSort(HashMap unSortedWordMap){
-        TreeMap sortedMap = new TreeMap(unSortedWordMap);
+    public static TreeMap sortDescending(HashMap unSortedWordMap){
+        TreeMap sortedMap = new TreeMap<>(Collections.reverseOrder());
+        sortedMap.putAll(unSortedWordMap);
         return sortedMap;
     }
 
 
         public static void main(String[] args) throws IOException  {
         System.out.println(grabWebPage());
-            System.out.println(parseSort(countStrings(test)));
+            System.out.println(sortDescending(countStrings(test)));
 
         }
 
