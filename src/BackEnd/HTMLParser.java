@@ -6,15 +6,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class HTMLParser {
 
     public static String grabWebPage() throws IOException {
-        Document webDoc = Jsoup.connect("https://en.wikipedia.org/wiki/Mario").userAgent("Mozilla").data("name", "jsoup").get();
+        Document webDoc = Jsoup.connect("https://en.wikipedia.org/wiki/Steve_Jobs").userAgent("Mozilla").data("name", "jsoup").get();
         Elements webElements = webDoc.select("div#mw-content-text");
         //This Makes the out.file (But we need to read from a control file)
         //PrintStream fileOut = new PrintStream(new File("control.txt"));
@@ -26,38 +28,6 @@ public class HTMLParser {
         return elements;
     }
 
-    // Counts Amount of words in array and puts words with keys on a hashmap
-    public static HashMap countStrings(String[] wordList) {
-        HashMap map = new HashMap();
-        Integer ONE = 1;
-
-        for (int i = 0, n = wordList.length; i < n; i++) {
-            String key = wordList[i];
-            Integer frequency = (Integer) map.get(key);
-            if (frequency == null) {
-                frequency = ONE;
-            } else {
-                int value = frequency.intValue();
-                frequency = value + 1;
-            }
-            map.put(key, frequency);
-
-        }
-        return map;
-    }
-
-    public static TreeMap sortDescending(HashMap unSortedWordMap) {
-        DescendingSort comp = new DescendingSort(unSortedWordMap);
-        TreeMap sortedMap = new TreeMap<>(comp);
-        sortedMap.putAll(unSortedWordMap);
-        return sortedMap;
-    }
-
-    public static void printArrayVertically(String[] test) {
-        for (String s : test) {
-            System.out.println(s);
-        }
-    }
 
     public static void printListVertically(List<Entry<String, Long>> listEntry) {
         for (Entry<String, Long> entry : listEntry) {
@@ -85,23 +55,15 @@ public class HTMLParser {
 
     }
 
-
-    public static void rankEntries(TreeMap tree, int rank) {
-
-    }
-
     public static void run(String regex) throws IOException {
         printListVertically(filterAndSort(grabWebPage(), regex));
     }
 
-    public static void main(String[] args) throws IOException {
-        // To just grab the webpage sting
-        //System.out.print(grabWebPage());
+    // Constructor
+    public HTMLParser() throws IOException{
 
         run("[^a-zA-Z\\s]+|\\b\\w{0,4}\\b");
-
-
-
     }
+
 }
 
