@@ -26,19 +26,88 @@ public class UI {
                 } catch (UnsupportedLookAndFeelException ex) {
                 }
 
-                TerminalOutputPane terminalOutputPane = new TerminalOutputPane();
                 JFrame frame = new JFrame();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setLayout(new BorderLayout());
-                terminalOutputPane.setSize( 300,300 );
-                frame.add( terminalOutputPane );
-                frame.setSize(800, 800);
+                JPanel panel = new JPanel();
+
+                JTextField urlField;
+                JLabel urlLabel;
+                JLabel emptyLabel;
+
+                JButton goButton;
+                JButton fileButton;
+
+                //Frame Stuff
+                frame.setSize(800,800);
                 frame.setLocationRelativeTo(null);
+
                 frame.setVisible(true);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.add(panel);
+
+
+                // GridBagLayout
+               // panel.setLayout(new GridBagLayout());
+                //GridBagConstraints gc= new GridBagConstraints();
+
+                //terminal stuff
+                TerminalOutputPane terminalOutputPanel = new TerminalOutputPane();
+                panel.add(terminalOutputPanel);
+
+
+
+                //url stuff
+                //urlLabel = new JLabel("Search using URL:  ");
+               // urlField= new JTextField(20);
+
+                //gobutton Stuff
+               // goButton = new JButton("Go");
+                //filebutton Stuff
+                //fileButton = new JButton("Search using txt file" );
+
+                //empty label stuff
+               // emptyLabel = new JLabel("   ");
+
+
+                // terminals location
+                /*gc.gridy = 0 ; //row 0
+                gc.gridx = 2; //column 2
+                gc.anchor = GridBagConstraints.LINE_START;
+                panel.add(terminalOutputPanel, gc);
+
+                //urlLabel locations
+                gc.gridy = 0; // row 0
+                gc.gridx = 0; // column 0
+                gc.anchor = GridBagConstraints.LINE_END;
+                panel.add(urlLabel,gc);
+
+                //Field(textbox) locations
+                gc.gridy = 0; // row 0
+                gc.gridx = 1; // column 1
+                gc.anchor = GridBagConstraints.LINE_START;
+                panel.add(urlField,gc);
+
+                //GoButton locations
+                gc.gridy = 1;
+                gc.gridx = 1;
+                gc.anchor = GridBagConstraints.LINE_END;
+                panel.add(goButton, gc);
+
+                //empty label location
+                gc.gridy = 3;
+                gc.gridx = 1;
+                gc.anchor = GridBagConstraints.LINE_START;
+                panel.add(emptyLabel, gc);
+
+
+                //Search using txt file
+                gc.gridy = 4;
+                gc.gridx = 1;
+                gc.anchor = GridBagConstraints.LINE_START;
+                panel.add(fileButton, gc);*/
+
 
                 PrintStream ps = System.out;
-                System.setOut(new PrintStream(new StreamCapturer("STDOUT", terminalOutputPane, ps)));
-
+                System.setOut(new PrintStream(new StreamCapturer("STDOUT", terminalOutputPanel, ps)));
 
                 HTMLParser runHTMLParse = null;
                 try {
