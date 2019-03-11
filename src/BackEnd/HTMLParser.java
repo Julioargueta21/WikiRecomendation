@@ -5,22 +5,45 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Map;
+import java.io.PrintStream;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class HTMLParser {
+    String link;
 
-    public static String grabWebPage() throws IOException {
-        Document webDoc = Jsoup.connect("https://en.wikipedia.org/wiki/Steve_Jobs").userAgent("Mozilla").data("name", "jsoup").get();
+    public String grabWebPage(boolean flag) throws IOException {
+        // Reads From Control File
+        File file = new File("control.txt");
+        Scanner sc = new Scanner(file);
+        while (sc.hasNextLine()) {
+            this.link = sc.nextLine();
+        }
+
+        Document webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
         Elements webElements = webDoc.select("div#mw-content-text");
-        //This Makes the out.file (But we need to read from a control file)
-        //PrintStream fileOut = new PrintStream(new File("control.txt"));
-        //System.setOut(fileOut);
+
+
+
+        String[] shortLink  = link.split("^(.*[\\\\\\/])");
+
+        StringBuilder builder = new StringBuilder();
+        for (String value : shortLink) {
+            builder.append(value);
+        }
+        String text = builder.toString();
+        //This Makes the out.file (Makes a output file and cuts off System.out (GUI Depends on this being false))
+
+        if (flag == true) {
+
+
+            PrintStream fileOut = new PrintStream(new File (text+".txt"));
+            System.setOut(fileOut);
+        }
+
         String elements = null;
         for (Element el : webElements) {
             elements = el.text();
@@ -43,24 +66,24 @@ public class HTMLParser {
         Map<String, Long> frequencyMap = Arrays.stream(string.split("\\s+"))
                 .filter(word -> word.matches("\\b\\w{5,}\\b"))
                 .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
-        Comparator<Map.Entry<String, Long>> byValue = Comparator.comparing( Map.Entry::getValue);
+        Comparator<Map.Entry<String, Long>> byValue = Comparator.comparing(Map.Entry::getValue);
 
         //
         List<Map.Entry<String, Long>> sortedByFrequency = frequencyMap.entrySet()
                 .stream()
                 .sorted(byValue.reversed())
-                .collect( Collectors.toList());
+                .collect(Collectors.toList());
 
         return sortedByFrequency;
 
     }
 
-    public static void run(String regex) throws IOException {
-        printListVertically(filterAndSort(grabWebPage(), regex));
+    public void run(String regex) throws IOException {
+        printListVertically(filterAndSort(grabWebPage(true), regex));
     }
 
     // Constructor
-    public HTMLParser() throws IOException{
+    public HTMLParser() throws IOException {
 
         run("[^a-zA-Z\\s]+|\\b\\w{0,4}\\b");
     }

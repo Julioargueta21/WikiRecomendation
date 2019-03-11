@@ -13,3 +13,14 @@ public class Main {
 
 
 }
+
+// TODO: The program reads 10 (or more) web pages (1/10)
+
+// TODO: The urls for these web pages can be maintained in a control file that is read when the program starts. (YES)
+
+// TODO: For each page, the program maintains frequencies of words. (1/10)
+
+// TODO: The user can enter any other URL (0/1)
+
+// TODO: The program reports which other known page is most closely related, using a similarity metric of your choosing. (lol)
+
