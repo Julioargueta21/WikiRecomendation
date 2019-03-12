@@ -16,7 +16,7 @@ public class Main {
 
 // TODO: The program reads 10 (or more) web pages (1/10)
 
-// TODO: The urls for these web pages can be maintained in a control file that is read when the program starts. (YES)
+// TODO: The urls for these web pages can be maintained in a control ctrlFile that is read when the program starts. (YES)
 
 // TODO: For each page, the program maintains frequencies of words. (1/10)
 

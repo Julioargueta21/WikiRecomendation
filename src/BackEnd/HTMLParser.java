@@ -13,43 +13,52 @@ import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 public class HTMLParser {
-    String link;
-
-    public String grabWebPage(boolean flag) throws IOException {
-        // Reads From Control File
-        File file = new File("control.txt");
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()) {
-            this.link = sc.nextLine();
-        }
-
-        Document webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
-        Elements webElements = webDoc.select("div#mw-content-text");
+    static File ctrlFile = new File("control.txt");
 
 
+    public static String linkProvider(File controlFile) throws IOException {
+        String linkLocal = "";
 
-        String[] shortLink  = link.split("^(.*[\\\\\\/])");
-
-        StringBuilder builder = new StringBuilder();
-        for (String value : shortLink) {
-            builder.append(value);
-        }
-        String text = builder.toString();
-        //This Makes the out.file (Makes a output file and cuts off System.out (GUI Depends on this being false))
-
-        if (flag == true) {
-
-
-            PrintStream fileOut = new PrintStream(new File (text+".txt"));
-            System.setOut(fileOut);
-        }
-
-        String elements = null;
-        for (Element el : webElements) {
-            elements = el.text();
-        }
-        return elements;
+        Scanner sc = new Scanner(controlFile);
+        for (int amountOfLinks = 0 ; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
+            linkLocal = sc.nextLine();
+            System.out.println(amountOfLinks);
+            System.out.println(linkLocal);
     }
+        return linkLocal;
+
+    }
+
+    public static String grabWebPage() throws IOException {
+
+
+        // Reads From Control File
+
+        String link = linkProvider(ctrlFile);
+
+            Document webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
+            Elements webElements = webDoc.select("div#mw-content-text");
+
+            // To make File titles
+            String[] shortLink = link.split("^(.*[\\\\\\/])");
+
+            StringBuilder builder = new StringBuilder();
+            for (String value : shortLink) {
+                builder.append(value);
+            }
+            String text = builder.toString();
+            //This Makes the out.ctrlFile (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
+                PrintStream fileOut = new PrintStream(new File(text + ".txt"));
+                System.setOut(fileOut);
+            // Parse and returns raw text
+            String elements = null;
+            for (Element el : webElements) {
+                elements = el.text();
+            }
+
+            return elements;
+
+}
 
 
     public static void printListVertically(List<Entry<String, Long>> listEntry) {
@@ -79,7 +88,7 @@ public class HTMLParser {
     }
 
     public void run(String regex) throws IOException {
-        printListVertically(filterAndSort(grabWebPage(true), regex));
+        printListVertically(filterAndSort(grabWebPage(), regex));
     }
 
     // Constructor
