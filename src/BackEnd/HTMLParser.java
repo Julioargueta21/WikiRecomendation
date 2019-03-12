@@ -16,28 +16,22 @@ public class HTMLParser {
     static File ctrlFile = new File("control.txt");
 
 
-    public static String linkProvider(File controlFile) throws IOException {
-        String linkLocal = "";
 
-        Scanner sc = new Scanner(controlFile);
-        for (int amountOfLinks = 0 ; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
-            linkLocal = sc.nextLine();
-            System.out.println(amountOfLinks);
-            System.out.println(linkLocal);
-    }
-        return linkLocal;
-
-    }
 
     public static String grabWebPage() throws IOException {
-
-
         // Reads From Control File
+        Scanner sc = new Scanner(ctrlFile);
+        String link = "";
+        Document webDoc;
+        Elements webElements = null;
 
-        String link = linkProvider(ctrlFile);
+        for (int amountOfLinks = 0 ; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
+            System.out.println(amountOfLinks);
+            System.out.println(link);
+            link = sc.nextLine();
+            webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
+            webElements = webDoc.select("div#mw-content-text");
 
-            Document webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
-            Elements webElements = webDoc.select("div#mw-content-text");
 
             // To make File titles
             String[] shortLink = link.split("^(.*[\\\\\\/])");
@@ -47,16 +41,19 @@ public class HTMLParser {
                 builder.append(value);
             }
             String text = builder.toString();
-            //This Makes the out.ctrlFile (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
-                PrintStream fileOut = new PrintStream(new File(text + ".txt"));
-                System.setOut(fileOut);
-            // Parse and returns raw text
-            String elements = null;
-            for (Element el : webElements) {
-                elements = el.text();
-            }
+            //This Makes the output  (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
+            PrintStream fileOut = new PrintStream(new File(text + ".txt"));
 
-            return elements;
+            System.setOut(fileOut);
+
+        }
+        // Parse and returns raw text
+        String elements = null;
+        for (Element el : webElements) {
+            elements = el.text();
+        }
+
+        return elements;
 
 }
 
@@ -93,7 +90,7 @@ public class HTMLParser {
 
     // Constructor
     public HTMLParser() throws IOException {
-
+        
         run("[^a-zA-Z\\s]+|\\b\\w{0,4}\\b");
     }
 
