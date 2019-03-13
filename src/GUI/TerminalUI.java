@@ -25,13 +25,6 @@ public class TerminalUI {
                 JFrame frame = new JFrame();
                 JPanel panel = new JPanel();
 
-                JTextField urlField;
-                JLabel urlLabel;
-                JLabel emptyLabel;
-
-                JButton goButton;
-                JButton fileButton;
-
                 //Frame Stuff
                 frame.setSize(800,800);
                 frame.setLocationRelativeTo(null);

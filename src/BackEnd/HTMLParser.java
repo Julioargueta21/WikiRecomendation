@@ -12,6 +12,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
+import GUI.UI;
+
+import static java.lang.Thread.sleep;
+
 public class HTMLParser {
     static File ctrlFile = new File("control.txt");
     Scanner sc = new Scanner(ctrlFile);
@@ -33,7 +37,7 @@ public static void clearFiles(){
 }
 
 
-    public String grabWebPage(boolean mode) throws IOException {
+    public void grabWebPage(boolean useCustomURL) throws IOException {
         // Reads From Control File
         clearFiles();
         String link = "";
@@ -41,18 +45,17 @@ public static void clearFiles(){
         Elements webElements;
         String elements = "";
 
-        mode = false;
-        if(mode){
-            //////
-        }
-        for (amountOfLinks = 0 ; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
-            System.out.println(amountOfLinks);
-            System.out.println(link);
-            link = sc.nextLine();
 
-            webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
+        if (useCustomURL) {
+            System.out.println(amountOfLinks + "= Amount of links");
+            System.out.println(UI.getURLTxtBox() + "= the link being inputed into the jsoup");
+            System.out.println( UI.getGoButtonState()+ "= GoButtonState");
+            /// Grab Text from gui
+            link = UI.getURLTxtBox();
+
+
+            webDoc = Jsoup.connect(link + "").userAgent("Mozilla").data("name", "jsoup").get();
             webElements = webDoc.select("div#mw-content-text");
-
 
             // To make File titles
             String[] shortLink = link.split("^(.*[\\\\\\/])");
@@ -75,12 +78,43 @@ public static void clearFiles(){
             //System.out.println(amountOfLinks);
             // System.out.println(link);
             printListVertically(filterAndSort(elements));
+
+
+        } else if(useCustomURL = false) {
+            for (amountOfLinks = 0; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
+                System.out.println(amountOfLinks);
+                System.out.println(link);
+                link = sc.nextLine();
+
+
+                webDoc = Jsoup.connect(link).userAgent("Mozilla").data("name", "jsoup").get();
+                webElements = webDoc.select("div#mw-content-text");
+
+                // To make File titles
+                String[] shortLink = link.split("^(.*[\\\\\\/])");
+
+                StringBuilder builder = new StringBuilder();
+                for (String value : shortLink) {
+                    builder.append(value);
+                }
+                String text = builder.toString();
+                //This Makes the output  (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
+                PrintStream fileOut = new PrintStream(new File(text + ".txt"));
+                System.out.println(text);
+
+                System.setOut(fileOut);
+                for (Element el : webElements) {
+                    elements = el.text();
+
+                }
+                //--DEBUG
+                //System.out.println(amountOfLinks);
+                // System.out.println(link);
+                printListVertically(filterAndSort(elements));
+            }
         }
+    }
         // Parse and returns raw text
-
-        return elements;
-}
-
     public static List<Map.Entry<String, Long>> filterAndSort(String string) {
         //
         Map<String, Long> frequencyMap = Arrays.stream(string.split("\\s+"))
@@ -92,10 +126,8 @@ public static void clearFiles(){
                 .stream()
                 .sorted(byValue.reversed())
                 .collect(Collectors.toList());
-
         return sortedByFrequency;
     }
-
         public static void printListVertically(List<Entry<String, Long>> listEntry) {
 
             for (Entry<String, Long> entry : listEntry) {
@@ -107,7 +139,7 @@ public static void clearFiles(){
     }
     // Constructor
     public HTMLParser() throws IOException {
-       grabWebPage(true); // UI supposed to set bool
+       grabWebPage(UI.getGoButtonState()); // UI supposed to set bool
 
 }}
 

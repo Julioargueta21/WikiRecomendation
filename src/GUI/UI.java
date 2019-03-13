@@ -2,8 +2,14 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UI {
+
+    static String urlTxtBox = "";
+    static boolean isGoButtonClicked = false;
+
     public UI(){
     JFrame frame = new JFrame("Shit");
         // Shitty Panel
@@ -19,24 +25,34 @@ public class UI {
 
 
 
+
+        //url stuff
+        JLabel urlLabel = new JLabel("Search using URL:  ");
+        JTextField urlField= new JTextField(20);
+
+
+
+        //gobutton Stuff
+        JButton goButton = new JButton("Go");
+
+        goButton.addActionListener(ae -> {
+            urlTxtBox = urlField.getText();
+            isGoButtonClicked = true;
+            // .... do some operation on value ...
+        });
+
+
+        //filebutton Stuff
+        JButton fileButton = new JButton("Search using txt file" );
+
+        //empty label stuff
+        JLabel emptyLabel = new JLabel("   ");
+
+
+
     //GridBagLayout
     //frame.setLayout(new GridBagLayout());
     GridBagConstraints gc = new GridBagConstraints();
-
-
-
-    //url stuff
-    JLabel urlLabel = new JLabel("Search using URL:  ");
-    JTextField urlField= new JTextField(20);
-
-    //gobutton Stuff
-    JButton goButton = new JButton("Go");
-    //filebutton Stuff
-    JButton fileButton = new JButton("Search using txt file" );
-
-    //empty label stuff
-    JLabel emptyLabel = new JLabel("   ");
-
 
     //urlLabel locations
     gc.gridy = 0; // row 0
@@ -71,4 +87,16 @@ public class UI {
 
 }
 
+
+
+    public static String getURLTxtBox(){
+        System.out.println(urlTxtBox);
+        return urlTxtBox;
+    }
+
+    public static boolean getGoButtonState(){
+        System.out.println(" is button clicked "+ isGoButtonClicked  );
+
+        return  isGoButtonClicked;
+    }
 }
