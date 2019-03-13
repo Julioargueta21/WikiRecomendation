@@ -23,7 +23,7 @@ public class TerminalUI {
                 }
 
                 JFrame frame = new JFrame();
-                JPanel panel = new JPanel();
+                JPanel terminalPanel = new JPanel();
 
                 //Frame Stuff
                 frame.setSize(800,800);
@@ -31,7 +31,7 @@ public class TerminalUI {
 
                 frame.setVisible(true);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.add(panel);
+                frame.add(terminalPanel);
 
                 //terminal stuff
                 TerminalOutputPane terminalOutputPanel = new TerminalOutputPane();

@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
@@ -18,26 +19,34 @@ import static java.lang.Thread.sleep;
 
 public class HTMLParser {
     static File ctrlFile = new File("control.txt");
-    Scanner sc = new Scanner(ctrlFile);
+    static Scanner sc;
+
+    static {
+        try {
+            sc = new Scanner(ctrlFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     static int amountOfLinks;
 
 
-public static void clearFiles(){
-    File folder = new File("/");
-    File fList[] = folder.listFiles();
+    public static void clearFiles() {
+        File folder = new File("/");
+        File fList[] = folder.listFiles();
 
-    for (File file : fList) {
-        if (file.getName().endsWith(".txt")) {
-            file.delete();
-        }
-        else if(file.getName().startsWith("control.txt")) {
-        }
+        for (File file : fList) {
+            if (file.getName().endsWith(".txt")) {
+                file.delete();
+            } else if (file.getName().startsWith("control.txt")) {
+            }
 //TODO: FIX THIS
+        }
     }
-}
 
 
-    public void grabWebPage(boolean useCustomURL) throws IOException {
+    public static void grabWebPage(boolean useCustomURL) throws IOException {
         // Reads From Control File
         clearFiles();
         String link = "";
@@ -47,12 +56,8 @@ public static void clearFiles(){
 
 
         if (useCustomURL) {
-            System.out.println(amountOfLinks + "= Amount of links");
-            System.out.println(UI.getURLTxtBox() + "= the link being inputed into the jsoup");
-            System.out.println( UI.getGoButtonState()+ "= GoButtonState");
             /// Grab Text from gui
             link = UI.getURLTxtBox();
-
 
             webDoc = Jsoup.connect(link + "").userAgent("Mozilla").data("name", "jsoup").get();
             webElements = webDoc.select("div#mw-content-text");
@@ -74,16 +79,17 @@ public static void clearFiles(){
                 elements = el.text();
 
             }
+
             //--DEBUG
             //System.out.println(amountOfLinks);
             // System.out.println(link);
             printListVertically(filterAndSort(elements));
 
 
-        } else if(useCustomURL = false) {
+        } else if (!useCustomURL) {
             for (amountOfLinks = 0; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
                 System.out.println(amountOfLinks);
-                System.out.println(link);
+
                 link = sc.nextLine();
 
 
@@ -111,10 +117,12 @@ public static void clearFiles(){
                 //System.out.println(amountOfLinks);
                 // System.out.println(link);
                 printListVertically(filterAndSort(elements));
+                System.out.println(link);
             }
         }
     }
-        // Parse and returns raw text
+
+    // Parse and returns raw text
     public static List<Map.Entry<String, Long>> filterAndSort(String string) {
         //
         Map<String, Long> frequencyMap = Arrays.stream(string.split("\\s+"))
@@ -128,18 +136,21 @@ public static void clearFiles(){
                 .collect(Collectors.toList());
         return sortedByFrequency;
     }
-        public static void printListVertically(List<Entry<String, Long>> listEntry) {
 
-            for (Entry<String, Long> entry : listEntry) {
-                String key = entry.getKey();
-                Long value = entry.getValue();
-                System.out.println(key + " = " + value);
-            }
+    public static void printListVertically(List<Entry<String, Long>> listEntry) {
+
+        for (Entry<String, Long> entry : listEntry) {
+            String key = entry.getKey();
+            Long value = entry.getValue();
+            System.out.println(key + " = " + value);
+        }
 
     }
+
     // Constructor
     public HTMLParser() throws IOException {
-       grabWebPage(UI.getGoButtonState()); // UI supposed to set bool
+        // UI supposed to set bool
 
-}}
+    }
+}
 

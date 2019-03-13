@@ -1,9 +1,15 @@
 package GUI;
 
+import BackEnd.HTMLParser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Scanner;
+
+import static BackEnd.HTMLParser.grabWebPage;
 
 public class UI {
 
@@ -11,19 +17,16 @@ public class UI {
     static boolean isGoButtonClicked = false;
 
     public UI(){
-    JFrame frame = new JFrame("Shit");
-        // Shitty Panel
+    JFrame frame = new JFrame("Wiki-Parser");
+        // Panel
         JPanel panel = new JPanel();
+
         //Frame Stuff
-        frame.setSize(800,800);
+        frame.setSize(400,400);
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(panel);
-
-
-
 
 
         //url stuff
@@ -34,17 +37,33 @@ public class UI {
 
         //gobutton Stuff
         JButton goButton = new JButton("Go");
-
         goButton.addActionListener(ae -> {
             urlTxtBox = urlField.getText();
-            isGoButtonClicked = true;
-            // .... do some operation on value ...
+            Scanner urlScan = new Scanner(urlTxtBox);
+            if(urlScan.hasNext()) {
+
+                try {
+                    HTMLParser.grabWebPage(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Enter A Valid Link");
+            }
         });
 
-
         //filebutton Stuff
-        JButton fileButton = new JButton("Search using txt file" );
+        JButton fileButton = new JButton("Search using control file" );
+        fileButton.addActionListener(ae -> {
+            try {
+                HTMLParser.grabWebPage(false);
+                JOptionPane.showMessageDialog(null, "Success, check your directory ");
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         //empty label stuff
         JLabel emptyLabel = new JLabel("   ");
 
@@ -85,8 +104,8 @@ public class UI {
     gc.anchor = GridBagConstraints.LINE_START;
     panel.add(fileButton, gc);
 
-}
-
+    frame.add(panel);
+    }
 
 
     public static String getURLTxtBox(){
@@ -99,4 +118,6 @@ public class UI {
 
         return  isGoButtonClicked;
     }
+
+
 }
