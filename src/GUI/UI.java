@@ -44,6 +44,7 @@ public class UI {
 
                 try {
                     HTMLParser.grabWebPage(true);
+                    JOptionPane.showMessageDialog(null, "Success, check your directory ");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -72,7 +72,7 @@ public class HTMLParser {
             String text = builder.toString();
             //This Makes the output  (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
             PrintStream fileOut = new PrintStream(new File(text + ".txt"));
-            System.out.println(text);
+           // System.out.println(text);
 
             System.setOut(fileOut);
             for (Element el : webElements) {
@@ -88,7 +88,7 @@ public class HTMLParser {
 
         } else if (!useCustomURL) {
             for (amountOfLinks = 0; amountOfLinks < 10 && sc.hasNextLine(); amountOfLinks++) {
-                System.out.println(amountOfLinks);
+               // System.out.println(amountOfLinks);
 
                 link = sc.nextLine();
 
@@ -106,7 +106,7 @@ public class HTMLParser {
                 String text = builder.toString();
                 //This Makes the output  (Makes a output ctrlFile and cuts off System.out (GUI Depends on this being false))
                 PrintStream fileOut = new PrintStream(new File(text + ".txt"));
-                System.out.println(text);
+                // System.out.println(text);
 
                 System.setOut(fileOut);
                 for (Element el : webElements) {
@@ -117,7 +117,7 @@ public class HTMLParser {
                 //System.out.println(amountOfLinks);
                 // System.out.println(link);
                 printListVertically(filterAndSort(elements));
-                System.out.println(link);
+                // System.out.println(link);
             }
         }
     }

@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         new UI();
-       // new TerminalUI();
+        //new TerminalUI();
     }
 
 
@@ -20,6 +20,6 @@ public class Main {
 
 // TODO: For each page, the program maintains frequencies of words. (10/10)
 
-// TODO: The user can enter any other URL (0/1)
+// TODO: The user can enter any other URL (1/1)
 
 // TODO: The program reports which other known page is most closely related, using a similarity metric of your choosing. (0/1)
